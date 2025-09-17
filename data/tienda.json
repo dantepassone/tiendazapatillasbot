@@ -1,0 +1,29 @@
+{
+  "nombre": "Zapatillas Dolores",
+  "ubicacion": "Dolores, Provincia de Buenos Aires, Argentina",
+  "direccion": "Calle Principal 123, Dolores, Buenos Aires",
+  "telefono": "+54 9 11 1234-5678",
+  "email": "info@zapatillasdolores.com",
+  "horarios": {
+    "lunes_viernes": "9:00 - 18:00",
+    "sabados": "9:00 - 13:00",
+    "domingos": "Cerrado"
+  },
+  "metodos_pago": [
+    "Efectivo",
+    "Tarjeta de débito",
+    "Tarjeta de crédito",
+    "Transferencia bancaria",
+    "Mercado Pago"
+  ],
+  "envios": {
+    "local": "Gratis en Dolores",
+    "provincia": "Desde $500",
+    "nacional": "Desde $800"
+  },
+  "redes_sociales": {
+    "instagram": "@zapatillasdolores",
+    "facebook": "Zapatillas Dolores"
+  },
+  "descripcion": "Tienda especializada en zapatillas deportivas y casuales. Las mejores marcas al mejor precio en Dolores, Buenos Aires."
+}

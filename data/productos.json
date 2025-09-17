@@ -1,0 +1,136 @@
+{
+  "categorias": [
+    "Deportivas",
+    "Casuales",
+    "Running",
+    "Básquet",
+    "Fútbol"
+  ],
+  "marcas": [
+    "Nike",
+    "Adidas",
+    "Puma",
+    "Reebok",
+    "Converse",
+    "Vans",
+    "New Balance",
+    "Fila"
+  ],
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Nike Air Force 1",
+      "marca": "Nike",
+      "categoria": "Casuales",
+      "precio": 45000,
+      "tallas": ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+      "stock": {
+        "36": 3,
+        "37": 5,
+        "38": 4,
+        "39": 6,
+        "40": 8,
+        "41": 7,
+        "42": 5,
+        "43": 4,
+        "44": 3,
+        "45": 2
+      },
+      "colores": ["Blanco", "Negro", "Blanco/Negro"],
+      "descripcion": "Zapatilla clásica de Nike, perfecta para uso diario. Cómoda y versátil.",
+      "imagen": "nike_air_force_1.jpg"
+    },
+    {
+      "id": 2,
+      "nombre": "Adidas Ultraboost 22",
+      "marca": "Adidas",
+      "categoria": "Running",
+      "precio": 65000,
+      "tallas": ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+      "stock": {
+        "36": 2,
+        "37": 3,
+        "38": 4,
+        "39": 5,
+        "40": 6,
+        "41": 5,
+        "42": 4,
+        "43": 3,
+        "44": 2,
+        "45": 1
+      },
+      "colores": ["Negro", "Blanco", "Azul"],
+      "descripcion": "Zapatilla de running premium con tecnología Boost. Máxima comodidad para correr.",
+      "imagen": "adidas_ultraboost_22.jpg"
+    },
+    {
+      "id": 3,
+      "nombre": "Converse Chuck Taylor All Star",
+      "marca": "Converse",
+      "categoria": "Casuales",
+      "precio": 25000,
+      "tallas": ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+      "stock": {
+        "36": 8,
+        "37": 10,
+        "38": 12,
+        "39": 15,
+        "40": 18,
+        "41": 16,
+        "42": 14,
+        "43": 12,
+        "44": 10,
+        "45": 8
+      },
+      "colores": ["Blanco", "Negro", "Rojo", "Azul"],
+      "descripcion": "Clásico de Converse. Zapatilla icónica que nunca pasa de moda.",
+      "imagen": "converse_chuck_taylor.jpg"
+    },
+    {
+      "id": 4,
+      "nombre": "Nike Air Max 270",
+      "marca": "Nike",
+      "categoria": "Deportivas",
+      "precio": 55000,
+      "tallas": ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+      "stock": {
+        "36": 4,
+        "37": 5,
+        "38": 6,
+        "39": 7,
+        "40": 8,
+        "41": 7,
+        "42": 6,
+        "43": 5,
+        "44": 4,
+        "45": 3
+      },
+      "colores": ["Blanco", "Negro", "Blanco/Negro", "Rosa"],
+      "descripcion": "Zapatilla deportiva con tecnología Air Max. Cómoda y con estilo.",
+      "imagen": "nike_air_max_270.jpg"
+    },
+    {
+      "id": 5,
+      "nombre": "Puma Suede Classic",
+      "marca": "Puma",
+      "categoria": "Casuales",
+      "precio": 30000,
+      "tallas": ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+      "stock": {
+        "36": 6,
+        "37": 8,
+        "38": 10,
+        "39": 12,
+        "40": 14,
+        "41": 13,
+        "42": 11,
+        "43": 9,
+        "44": 7,
+        "45": 5
+      },
+      "colores": ["Blanco", "Negro", "Azul", "Verde"],
+      "descripcion": "Zapatilla clásica de Puma. Diseño retro y cómodo para el día a día.",
+      "imagen": "puma_suede_classic.jpg"
+    }
+  ]
+}
