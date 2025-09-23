@@ -204,6 +204,52 @@ def health_check():
             "error": str(e)
         }), 500
 
+@app.route("/test-ai", methods=["GET"])
+def test_ai():
+    """Endpoint para probar la IA"""
+    try:
+        from openrouter import OpenRouterAI
+        ai = OpenRouterAI()
+        
+        # Probar generación de respuesta
+        test_message = "Hola, ¿qué productos tienen?"
+        response = ai.generate_response(test_message, "test_phone")
+        
+        return jsonify({
+            "status": "success",
+            "test_message": test_message,
+            "ai_response": response,
+            "model": ai.model
+        })
+        
+    except Exception as e:
+        logger.error(f"AI test failed: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
+@app.route("/test-whatsapp", methods=["GET"])
+def test_whatsapp():
+    """Endpoint para probar configuración de WhatsApp"""
+    try:
+        from whatsapp import WhatsAppAPI
+        whatsapp = WhatsAppAPI()
+        
+        return jsonify({
+            "status": "success",
+            "whatsapp_configured": bool(whatsapp.access_token),
+            "phone_number_id": whatsapp.phone_number_id,
+            "verify_token_set": bool(whatsapp.verify_token)
+        })
+        
+    except Exception as e:
+        logger.error(f"WhatsApp test failed: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
 @app.errorhandler(404)
 def not_found(error):
     """Manejo de errores 404"""
