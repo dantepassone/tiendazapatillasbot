@@ -7,7 +7,7 @@ from database import Database
 class OpenRouterAI:
     def __init__(self):
         self.api_key = os.getenv("OPENROUTER_API_KEY")
-        self.model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free")
+        self.model = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3-0324:free")
         self.base_url = "https://openrouter.ai/api/v1"
         self.db = Database()
         

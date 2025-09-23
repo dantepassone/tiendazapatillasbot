@@ -98,7 +98,7 @@ python app.py
 - `GET /webhook` - Verificación de webhook
 
 ## 🤖 **Configuración de IA**
-- **Modelo**: [Modelo gratuito de OpenRouter]
+- **Modelo**: deepseek/deepseek-chat-v3-0324:free
 - **Contexto**: Información completa de la tienda
 - **Prompts**: Optimizados para consultas de zapatillas
 

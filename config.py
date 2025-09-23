@@ -18,7 +18,7 @@ class Config:
     
     # Configuración de OpenRouter
     OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-    OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free")
+    OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3-0324:free")
     OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
     
     # Configuración de WhatsApp
