@@ -90,6 +90,11 @@ class OpenRouterAI:
     def generate_response(self, user_message: str, phone_number: str = None) -> str:
         """Genera una respuesta usando OpenRouter AI"""
         try:
+            # Verificar que la API key esté configurada
+            if not self.api_key:
+                print("Error: OPENROUTER_API_KEY no está configurada")
+                return self.get_fallback_response(user_message)
+            
             # Obtener contexto de la tienda
             context_prompt = self.get_context_prompt()
             
@@ -120,6 +125,8 @@ class OpenRouterAI:
                 "presence_penalty": 0.1
             }
             
+            print(f"Enviando petición a OpenRouter con modelo: {self.model}")
+            
             # Realizar la petición
             response = requests.post(
                 f"{self.base_url}/chat/completions",
@@ -127,6 +134,8 @@ class OpenRouterAI:
                 json=payload,
                 timeout=30
             )
+            
+            print(f"Respuesta de OpenRouter: {response.status_code}")
             
             if response.status_code == 200:
                 data = response.json()
