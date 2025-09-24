@@ -211,19 +211,82 @@ def test_ai():
         from openrouter import OpenRouterAI
         ai = OpenRouterAI()
         
+        # Verificar configuración
+        config_status = {
+            "api_key_configured": bool(ai.api_key),
+            "base_url": ai.base_url
+        }
+        
         # Probar generación de respuesta
         test_message = "Hola, ¿qué productos tienen?"
         response = ai.generate_response(test_message, "test_phone")
+        
+        # Verificar si es respuesta de respaldo
+        is_fallback = "¡Hola! Bienvenido a Zapatillas Dolores" in response or "Los precios de nuestras zapatillas" in response
         
         return jsonify({
             "status": "success",
             "test_message": test_message,
             "ai_response": response,
-            "model": ai.model
+            "config": config_status,
+            "is_fallback_response": is_fallback,
+            "response_length": len(response)
         })
         
     except Exception as e:
         logger.error(f"AI test failed: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
+@app.route("/test-ai-detailed", methods=["GET"])
+def test_ai_detailed():
+    """Endpoint para probar la IA con más detalle"""
+    try:
+        import os
+        from openrouter import OpenRouterAI
+        import requests
+        
+        # Verificar variables de entorno
+        env_vars = {
+            "OPENROUTER_API_KEY": bool(os.getenv("OPENROUTER_API_KEY")),
+            "WHATSAPP_TOKEN": bool(os.getenv("WHATSAPP_TOKEN")),
+            "WHATSAPP_PHONE_NUMBER_ID": os.getenv("WHATSAPP_PHONE_NUMBER_ID"),
+            "WHATSAPP_VERIFY_TOKEN": bool(os.getenv("WHATSAPP_VERIFY_TOKEN"))
+        }
+        
+        ai = OpenRouterAI()
+        
+        # Probar diferentes mensajes
+        test_messages = [
+            "Hola",
+            "¿Qué productos tienen?",
+            "Quiero algo para el gym",
+            "¿Cuánto cuestan las Nike?"
+        ]
+        
+        results = []
+        for msg in test_messages:
+            response = ai.generate_response(msg, "test_phone")
+            results.append({
+                "message": msg,
+                "response": response,
+                "length": len(response)
+            })
+        
+        return jsonify({
+            "status": "success",
+            "environment_vars": env_vars,
+            "ai_config": {
+                "api_key_configured": bool(ai.api_key),
+                "base_url": ai.base_url
+            },
+            "test_results": results
+        })
+        
+    except Exception as e:
+        logger.error(f"Detailed AI test failed: {str(e)}")
         return jsonify({
             "status": "error",
             "error": str(e)
