@@ -7,7 +7,8 @@ from database import Database
 class OpenRouterAI:
     def __init__(self):
         self.api_key = os.getenv("OPENROUTER_API_KEY")
-        # No especificar modelo - usar el que ya tienes configurado en OpenRouter
+        # Usar modelo específico como respaldo
+        self.model = "meta-llama/llama-3.2-3b-instruct:free"
         self.base_url = "https://openrouter.ai/api/v1"
         self.db = Database()
         
@@ -148,8 +149,9 @@ class OpenRouterAI:
                 "X-Title": "Bot WhatsApp Zapatillas Dolores"
             }
             
-            # Configurar payload SIN especificar modelo - usar el configurado en OpenRouter
+            # Configurar payload con modelo específico
             payload = {
+                "model": self.model,
                 "messages": [
                     {
                         "role": "user",
@@ -163,7 +165,7 @@ class OpenRouterAI:
                 "presence_penalty": 0.1
             }
             
-            print(f"Enviando petición a OpenRouter (usando modelo configurado en cuenta)")
+            print(f"Enviando petición a OpenRouter con modelo: {self.model}")
             
             # Realizar la petición
             response = requests.post(
