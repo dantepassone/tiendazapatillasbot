@@ -1,6 +1,6 @@
 # Bot WhatsApp - Tienda de Zapatillas Dolores
 
-## 📍 **Información del Proyecto**
+## **Información del Proyecto**
 - **Ubicación**: Dolores, Provincia de Buenos Aires, Argentina
 - **Tipo**: Bot de WhatsApp con IA para tienda de zapatillas
 - **IA**: OpenRouter.ai (modelo gratuito)
@@ -8,7 +8,7 @@
 - **Hosting**: Render
 - **Lenguaje**: Python + Flask
 
-## 🛠️ **Tecnologías Utilizadas**
+## **Tecnologías Utilizadas**
 - **Backend**: Python 3.9+ con Flask
 - **IA**: OpenRouter.ai API
 - **WhatsApp**: WhatsApp Business API oficial
@@ -16,7 +16,7 @@
 - **Hosting**: Render
 - **Variables de entorno**: python-dotenv
 
-## 📦 **Dependencias**
+## **Dependencias**
 ```
 Flask==2.3.3
 requests==2.31.0
@@ -24,7 +24,7 @@ python-dotenv==1.0.0
 sqlite3 (built-in)
 ```
 
-## 🔑 **Variables de Entorno Necesarias**
+## **Variables de Entorno Necesarias**
 ```
 OPENROUTER_API_KEY=tu_token_openrouter
 WHATSAPP_TOKEN=tu_token_whatsapp
@@ -33,14 +33,14 @@ WHATSAPP_VERIFY_TOKEN=tu_verify_token
 RENDER_URL=https://tu-app.onrender.com
 ```
 
-## 🏪 **Información de la Tienda**
+## **Información de la Tienda**
 - **Nombre**: [Nombre de tu tienda]
 - **Ubicación**: Dolores, Buenos Aires, Argentina
 - **Productos**: Zapatillas deportivas y casuales
 - **Horarios**: [Horarios de atención]
 - **Contacto**: [Teléfono/Email]
 
-## 🚀 **Funcionalidades del Bot**
+## **Funcionalidades del Bot**
 - Consultas sobre productos específicos
 - Verificación de stock y tallas
 - Información de precios
@@ -48,7 +48,7 @@ RENDER_URL=https://tu-app.onrender.com
 - Consultas generales sobre la tienda
 - Respuestas inteligentes con IA
 
-## 📁 **Estructura del Proyecto**
+## **Estructura del Proyecto**
 ```
 tiendazapatillasbot/
 ├── app.py                 # Aplicación principal Flask
@@ -64,7 +64,7 @@ tiendazapatillasbot/
 └── README.md            # Este archivo
 ```
 
-## 🔧 **Instalación y Uso**
+## **Instalación y Uso**
 
 ### Local
 ```bash
@@ -93,27 +93,27 @@ python app.py
 
 **Ver [DEPLOYMENT.md](DEPLOYMENT.md) para instrucciones detalladas de despliegue.**
 
-## 📱 **Endpoints de WhatsApp**
+## **Endpoints de WhatsApp**
 - `POST /webhook` - Recibe mensajes de WhatsApp
 - `GET /webhook` - Verificación de webhook
 
-## 🤖 **Configuración de IA**
-- **Modelo**: deepseek/deepseek-chat-v3-0324:free
+## **Configuración de IA**
+- **Modelo**: Usa el modelo configurado en tu cuenta de OpenRouter
 - **Contexto**: Información completa de la tienda
 - **Prompts**: Optimizados para consultas de zapatillas
 
-## 📊 **Base de Datos**
+## **Base de Datos**
 - **Productos**: ID, nombre, precio, tallas, stock, descripción
 - **Tienda**: Información general, horarios, contacto
 - **Conversaciones**: Historial de mensajes (opcional)
 
-## 🔒 **Seguridad**
+## **Seguridad**
 - Verificación de tokens de WhatsApp
 - Validación de webhooks
 - Sanitización de inputs
 - Rate limiting básico
 
-## 📈 **Próximas Mejoras**
+## **Próximas Mejoras**
 - Integración con sistema de inventario
 - Procesamiento de pedidos
 - Notificaciones de stock
