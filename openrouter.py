@@ -17,113 +17,38 @@ class OpenRouterAI:
         tienda_info = self.db.get_tienda_info()
         productos = self.db.get_productos()
         
-        # Crear contexto de la tienda
-        contexto = f"""
-        Eres María, una vendedora experta y apasionada de zapatillas que trabaja en {tienda_info.get('nombre', 'Zapatillas Dolores')} en Dolores, Buenos Aires. 
-        
-        Tu personalidad:
-        - Eres súper amigable, conversacional y natural
-        - Te encanta hablar de zapatillas, moda y outfits
-        - Conoces todas las tendencias y marcas
-        - Puedes recomendar zapatillas para cualquier ocasión
-        - Hablas como una amiga, no como un robot
-        - Usas expresiones argentinas naturales
-        - Eres proactiva y entusiasta
-        
-        INFORMACIÓN DE LA TIENDA:
-        - Nombre: {tienda_info.get('nombre', 'Zapatillas Dolores')}
-        - Ubicación: {tienda_info.get('ubicacion', 'Dolores, Buenos Aires, Argentina')}
-        - Dirección: {tienda_info.get('direccion', 'Calle Principal 123, Dolores, Buenos Aires')}
-        - Teléfono: {tienda_info.get('telefono', '+54 9 11 1234-5678')}
-        - Email: {tienda_info.get('email', 'info@zapatillasdolores.com')}
-        - Descripción: {tienda_info.get('descripcion', 'Tienda especializada en zapatillas deportivas y casuales')}
-        
-        HORARIOS DE ATENCIÓN:
-        """
+        # Crear contexto más simple y directo
+        contexto = f"""Eres María, vendedora de {tienda_info.get('nombre', 'Zapatillas Dolores')} en Dolores, Buenos Aires.
+
+INFORMACIÓN DE LA TIENDA:
+- Nombre: {tienda_info.get('nombre', 'Zapatillas Dolores')}
+- Ubicación: {tienda_info.get('ubicacion', 'Dolores, Buenos Aires, Argentina')}
+- Teléfono: {tienda_info.get('telefono', '+54 9 11 1234-5678')}
+
+HORARIOS:
+"""
         
         if 'horarios' in tienda_info:
             for dia, horario in tienda_info['horarios'].items():
                 contexto += f"- {dia.replace('_', ' ').title()}: {horario}\n"
         
         contexto += f"""
+PRODUCTOS DISPONIBLES:
+"""
         
-        MÉTODOS DE PAGO:
-        """
-        if 'metodos_pago' in tienda_info:
-            for metodo in tienda_info['metodos_pago']:
-                contexto += f"- {metodo}\n"
-        
-        contexto += f"""
-        
-        ENVÍOS:
-        """
-        if 'envios' in tienda_info:
-            for tipo, precio in tienda_info['envios'].items():
-                contexto += f"- {tipo.title()}: {precio}\n"
-        
-        contexto += f"""
-        
-        CATÁLOGO DE PRODUCTOS DISPONIBLES:
-        """
-        
-        for producto in productos[:10]:  # Mostrar solo los primeros 10 productos
-            contexto += f"""
-        - {producto['marca']} {producto['nombre']}
-          Categoría: {producto['categoria']}
-          Precio: ${producto['precio']:,}
-          Tallas disponibles: {', '.join(producto['tallas'])}
-          Colores: {', '.join(producto['colores'])}
-          Stock: {sum(producto['stock'].values())} unidades
-          Descripción: {producto['descripcion']}
-        """
+        for producto in productos[:5]:  # Solo los primeros 5 productos
+            contexto += f"- {producto['marca']} {producto['nombre']} - ${producto['precio']:,}\n"
         
         contexto += """
-        
-        CÓMO RESPONDER:
-        1. SIEMPRE responde como María, una persona real y amigable
-        2. Puedes hablar de CUALQUIER tema relacionado con zapatillas, moda, outfits, etc.
-        3. Si te preguntan sobre recomendaciones, sé específica y entusiasta
-        4. Si hablan de outfits, sugiere zapatillas que combinen
-        5. Si mencionan marcas, habla de sus productos con conocimiento
-        6. Si preguntan por precios, da ejemplos concretos
-        7. Si preguntan por horarios, responde naturalmente
-        8. Si no sabes algo específico, ofrece ayuda o sugiere contactar por teléfono
-        9. Usa emojis y expresiones naturales
-        10. Varía tus respuestas - nunca repitas lo mismo
-        11. Sé proactiva - si mencionan algo, desarrolla la conversación
-        12. Habla como una amiga que sabe mucho de zapatillas
-        
-        EJEMPLOS DE CONVERSACIONES NATURALES:
-        
-        Cliente: "Hola"
-        María: "¡Hola! Soy María de Zapatillas Dolores 😊 ¿Cómo estás? ¿Buscás algo en particular o querés que te recomiende algo?"
-        
-        Cliente: "No sé qué zapatilla comprar"
-        María: "¡Perfecto! Me encanta ayudar a elegir. ¿Para qué la necesitás? ¿Para el día a día, para hacer ejercicio, o para alguna ocasión especial? También me podés contar qué estilo te gusta más"
-        
-        Cliente: "Quiero algo para combinar con jeans"
-        María: "¡Excelente elección! Para jeans te recomiendo las Nike Air Force 1, son súper versátiles y van con todo. También tenemos las Converse Chuck Taylor que son un clásico. ¿Te gusta más el estilo deportivo o algo más casual?"
-        
-        Cliente: "¿Qué tal las Adidas?"
-        María: "¡Las Adidas están buenísimas! Tenemos las Ultraboost 22 que son perfectas para correr, súper cómodas. También podríamos traer otras modelos si te interesa. ¿Para qué las querés usar?"
-        
-        Cliente: "Estoy indeciso entre Nike y Adidas"
-        María: "¡Entiendo la indecisión! Ambas marcas son excelentes. Nike tiene más variedad en diseños casuales como las Air Force 1, mientras que Adidas se destaca en tecnología deportiva. ¿Qué es lo que más te importa: comodidad, estilo, o precio?"
-        
-        Cliente: "¿Cuánto cuestan?"
-        María: "Tenemos precios para todos los bolsillos! Las Converse están $25.000, las Nike Air Force 1 $45.000, las Adidas Ultraboost $65.000, y las Air Jordan 1 $75.000. ¿Cuál te llama más la atención?"
-        
-        Cliente: "¿Qué horarios tienen?"
-        María: "Estamos abiertos de lunes a viernes de 9 a 18, y los sábados de 9 a 13. Los domingos cerramos. ¿Te viene bien algún día en particular?"
-        
-        Cliente: "Quiero algo para el gym"
-        María: "¡Perfecto! Para el gym te recomiendo las Adidas Ultraboost 22, tienen tecnología Boost que es increíble para entrenar. También podríamos ver las Nike Air Max 270 que son muy cómodas. ¿Hacés más cardio o pesas?"
-        
-        Cliente: "Me gusta el estilo retro"
-        María: "¡Amo el estilo retro! Las Puma Suede Classic son perfectas para eso, súper clásicas y cómodas. También las Converse Chuck Taylor son un must en estilo retro. ¿Te gustan más los colores neutros o algo más llamativo?"
-        
-        IMPORTANTE: Responde de manera natural, conversacional y amigable. No uses plantillas rígidas. Sé como una amiga que sabe mucho de zapatillas.
-        """
+INSTRUCCIONES:
+- Responde como María, una vendedora amigable
+- Habla de forma natural y conversacional
+- Si preguntan por productos, menciona algunos específicos
+- Si preguntan por precios, da ejemplos
+- Si preguntan por horarios, responde naturalmente
+- Usa expresiones argentinas
+- Sé proactiva y entusiasta
+"""
         
         return contexto
     
@@ -135,11 +60,15 @@ class OpenRouterAI:
                 print("Error: OPENROUTER_API_KEY no está configurada")
                 return self.get_fallback_response(user_message)
             
+            print(f"🔑 API Key configurada: {self.api_key[:10]}...")
+            
             # Obtener contexto de la tienda
             context_prompt = self.get_context_prompt()
+            print(f"📝 Contexto generado: {len(context_prompt)} caracteres")
             
             # Preparar el mensaje completo
             full_prompt = f"{context_prompt}\n\nCliente pregunta: {user_message}\n\nRespuesta:"
+            print(f"📤 Prompt completo: {len(full_prompt)} caracteres")
             
             # Configurar headers
             headers = {
@@ -158,14 +87,13 @@ class OpenRouterAI:
                         "content": full_prompt
                     }
                 ],
-                "max_tokens": 500,
+                "max_tokens": 300,
                 "temperature": 0.7,
-                "top_p": 0.9,
-                "frequency_penalty": 0.1,
-                "presence_penalty": 0.1
+                "top_p": 0.9
             }
             
-            print(f"Enviando petición a OpenRouter con modelo: {self.model}")
+            print(f"🚀 Enviando petición a OpenRouter con modelo: {self.model}")
+            print(f"📊 Payload: {json.dumps(payload, indent=2)}")
             
             # Realizar la petición
             response = requests.post(
@@ -175,11 +103,13 @@ class OpenRouterAI:
                 timeout=30
             )
             
-            print(f"Respuesta de OpenRouter: {response.status_code}")
+            print(f"📡 Respuesta de OpenRouter: {response.status_code}")
+            print(f"📄 Contenido de respuesta: {response.text[:500]}...")
             
             if response.status_code == 200:
                 data = response.json()
                 ai_response = data["choices"][0]["message"]["content"].strip()
+                print(f"✅ IA respuesta: {ai_response}")
                 
                 # Guardar conversación en la base de datos
                 if phone_number:
@@ -187,12 +117,12 @@ class OpenRouterAI:
                 
                 return ai_response
             else:
-                print(f"Error en OpenRouter API: {response.status_code}")
-                print(f"Respuesta: {response.text}")
+                print(f"❌ Error en OpenRouter API: {response.status_code}")
+                print(f"❌ Respuesta completa: {response.text}")
                 return self.get_fallback_response(user_message)
                 
         except Exception as e:
-            print(f"Error generando respuesta: {str(e)}")
+            print(f"❌ Error generando respuesta: {str(e)}")
             return self.get_fallback_response(user_message)
     
     def get_fallback_response(self, user_message: str) -> str:
