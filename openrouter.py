@@ -12,8 +12,8 @@ class OpenRouterAI:
         self.base_url = "https://openrouter.ai/api/v1"
         self.db = Database()
         
-    def get_context_prompt(self) -> str:
-        """Genera el prompt de contexto con información de la tienda"""
+    def get_context_prompt(self, phone_number: str = None) -> str:
+        """Genera el prompt de contexto con información de la tienda y historial de conversación"""
         tienda_info = self.db.get_tienda_info()
         productos = self.db.get_productos()
         
@@ -73,6 +73,15 @@ María: "Amo el estilo retro, las Puma Suede Classic están buenísimas para eso
 IMPORTANTE: Hablá como argentina, súper informal, natural. NO uses exclamaciones al principio. Solo al final si es necesario.
 """
         
+        # Agregar historial de conversación si existe
+        if phone_number:
+            history = self.db.get_conversation_history(phone_number, 3)
+            if history:
+                contexto += "\n\nCONVERSACIÓN ANTERIOR:\n"
+                for msg in reversed(history):  # Orden cronológico
+                    contexto += f"Usuario: {msg['mensaje']}\n"
+                    contexto += f"María: {msg['respuesta']}\n"
+        
         return contexto
     
     def generate_response(self, user_message: str, phone_number: str = None) -> str:
@@ -85,8 +94,8 @@ IMPORTANTE: Hablá como argentina, súper informal, natural. NO uses exclamacion
             
             print(f"🔑 API Key configurada: {self.api_key[:10]}...")
             
-            # Obtener contexto de la tienda
-            context_prompt = self.get_context_prompt()
+            # Obtener contexto de la tienda con historial
+            context_prompt = self.get_context_prompt(phone_number)
             print(f"📝 Contexto generado: {len(context_prompt)} caracteres")
             
             # Preparar el mensaje completo
