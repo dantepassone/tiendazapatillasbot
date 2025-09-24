@@ -7,7 +7,7 @@ from database import Database
 class OpenRouterAI:
     def __init__(self):
         self.api_key = os.getenv("OPENROUTER_API_KEY")
-        self.model = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-chat-v3-0324:free")
+        # No especificar modelo - usar el que ya tienes configurado en OpenRouter
         self.base_url = "https://openrouter.ai/api/v1"
         self.db = Database()
         
@@ -148,9 +148,8 @@ class OpenRouterAI:
                 "X-Title": "Bot WhatsApp Zapatillas Dolores"
             }
             
-            # Configurar payload
+            # Configurar payload SIN especificar modelo - usar el configurado en OpenRouter
             payload = {
-                "model": self.model,
                 "messages": [
                     {
                         "role": "user",
@@ -164,7 +163,7 @@ class OpenRouterAI:
                 "presence_penalty": 0.1
             }
             
-            print(f"Enviando petición a OpenRouter con modelo: {self.model}")
+            print(f"Enviando petición a OpenRouter (usando modelo configurado en cuenta)")
             
             # Realizar la petición
             response = requests.post(
@@ -200,7 +199,7 @@ class OpenRouterAI:
         
         # Respuestas básicas basadas en palabras clave
         if any(word in user_message_lower for word in ["precio", "cuesta", "vale", "costo"]):
-            return "¡Hola! Los precios de nuestras zapatillas van desde $25.000 hasta $65.000. ¿Te interesa alguna marca o modelo específico? Puedo darte más detalles sobre precios y disponibilidad."
+            return "¡Hola! Los precios de nuestras zapatillas van desde $25.000 hasta $75.000. ¿Te interesa alguna marca o modelo específico? Puedo darte más detalles sobre precios y disponibilidad."
         
         elif any(word in user_message_lower for word in ["horario", "abierto", "cerrado", "atención"]):
             return "Nuestros horarios de atención son:\n• Lunes a Viernes: 9:00 - 18:00\n• Sábados: 9:00 - 13:00\n• Domingos: Cerrado\n\n¡Te esperamos en Dolores, Buenos Aires!"
