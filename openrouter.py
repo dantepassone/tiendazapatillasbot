@@ -17,8 +17,8 @@ class OpenRouterAI:
         tienda_info = self.db.get_tienda_info()
         productos = self.db.get_productos()
         
-        # Crear contexto más simple y directo
-        contexto = f"""Eres María, vendedora de {tienda_info.get('nombre', 'Zapatillas Dolores')} en Dolores, Buenos Aires.
+        # Crear contexto más argentino e informal
+        contexto = f"""Sos María, vendedora de {tienda_info.get('nombre', 'Zapatillas Dolores')} en Dolores, Buenos Aires.
 
 INFORMACIÓN DE LA TIENDA:
 - Nombre: {tienda_info.get('nombre', 'Zapatillas Dolores')}
@@ -40,14 +40,35 @@ PRODUCTOS DISPONIBLES:
             contexto += f"- {producto['marca']} {producto['nombre']} - ${producto['precio']:,}\n"
         
         contexto += """
-INSTRUCCIONES:
-- Responde como María, una vendedora amigable
-- Habla de forma natural y conversacional
-- Si preguntan por productos, menciona algunos específicos
+INSTRUCCIONES IMPORTANTES:
+- Sos argentina, hablá como tal (vos, che, boludo, etc.)
+- NO te presentes cada vez, solo si es la primera vez
+- Hablá informal y natural, como una amiga
+- Si preguntan por productos, mencioná algunos específicos
 - Si preguntan por precios, da ejemplos
-- Si preguntan por horarios, responde naturalmente
-- Usa expresiones argentinas
-- Sé proactiva y entusiasta
+- Si preguntan por horarios, respondé naturalmente
+- Usá expresiones argentinas (buenísimo, re lindo, etc.)
+- Sé proactiva pero no repetitiva
+- NO digas "Soy María" en cada respuesta
+- Variá tus respuestas, no repitas lo mismo
+
+EJEMPLOS DE RESPUESTAS:
+Cliente: "Hola"
+María: "¡Hola! ¿Cómo va? ¿Buscás algo en particular?"
+
+Cliente: "¿Qué productos tienen?"
+María: "¡Tenemos de todo! Nike, Adidas, Puma, Converse... ¿Te interesa alguna marca? También tenemos las Air Force 1 que están buenísimas"
+
+Cliente: "¿Cuánto cuestan?"
+María: "Los precios van desde $25.000 hasta $75.000. Las Converse están $25.000, las Nike Air Force 1 $45.000, y las Air Jordan 1 $75.000. ¿Cuál te llama?"
+
+Cliente: "Quiero algo para el gym"
+María: "¡Perfecto! Para el gym te recomiendo las Adidas Ultraboost 22, son re cómodas. También tenemos las Nike Air Max 270. ¿Hacés más cardio o pesas?"
+
+Cliente: "Me gusta el estilo retro"
+María: "¡Amo el estilo retro! Las Puma Suede Classic están buenísimas para eso, súper clásicas. También las Converse Chuck Taylor son un must. ¿Te gustan más los colores neutros o algo más llamativo?"
+
+IMPORTANTE: Hablá como argentina, informal, natural. NO te presentes en cada respuesta.
 """
         
         return contexto
@@ -87,13 +108,12 @@ INSTRUCCIONES:
                         "content": full_prompt
                     }
                 ],
-                "max_tokens": 300,
-                "temperature": 0.7,
+                "max_tokens": 200,
+                "temperature": 0.8,
                 "top_p": 0.9
             }
             
             print(f"🚀 Enviando petición a OpenRouter con modelo: {self.model}")
-            print(f"📊 Payload: {json.dumps(payload, indent=2)}")
             
             # Realizar la petición
             response = requests.post(
@@ -104,7 +124,6 @@ INSTRUCCIONES:
             )
             
             print(f"📡 Respuesta de OpenRouter: {response.status_code}")
-            print(f"📄 Contenido de respuesta: {response.text[:500]}...")
             
             if response.status_code == 200:
                 data = response.json()
@@ -131,28 +150,28 @@ INSTRUCCIONES:
         
         # Respuestas básicas basadas en palabras clave
         if any(word in user_message_lower for word in ["precio", "cuesta", "vale", "costo"]):
-            return "¡Hola! Los precios de nuestras zapatillas van desde $25.000 hasta $75.000. ¿Te interesa alguna marca o modelo específico? Puedo darte más detalles sobre precios y disponibilidad."
+            return "¡Hola! Los precios van desde $25.000 hasta $75.000. ¿Te interesa alguna marca específica? Te puedo dar más detalles."
         
         elif any(word in user_message_lower for word in ["horario", "abierto", "cerrado", "atención"]):
-            return "Nuestros horarios de atención son:\n• Lunes a Viernes: 9:00 - 18:00\n• Sábados: 9:00 - 13:00\n• Domingos: Cerrado\n\n¡Te esperamos en Dolores, Buenos Aires!"
+            return "Estamos abiertos de lunes a viernes de 9 a 18, y sábados de 9 a 13. Los domingos cerramos. ¿Te viene bien algún día?"
         
         elif any(word in user_message_lower for word in ["ubicación", "dirección", "donde", "ubicado"]):
-            return "Estamos ubicados en Calle Principal 123, Dolores, Buenos Aires. También puedes contactarnos al +54 9 11 1234-5678 o por email a info@zapatillasdolores.com"
+            return "Estamos en Calle Principal 123, Dolores. También nos podés llamar al +54 9 11 1234-5678."
         
         elif any(word in user_message_lower for word in ["nike", "adidas", "puma", "converse", "vans"]):
-            return "¡Excelente elección! Tenemos varias marcas disponibles como Nike, Adidas, Puma, Converse y Vans. ¿Te interesa alguna marca específica o modelo en particular? Puedo darte más información sobre precios y tallas disponibles."
+            return "¡Buenísimo! Tenemos Nike, Adidas, Puma, Converse y Vans. ¿Te interesa alguna marca en particular? Te puedo contar más sobre precios y tallas."
         
         elif any(word in user_message_lower for word in ["talla", "tallas", "número", "calzado"]):
-            return "Tenemos tallas desde 36 hasta 45. ¿Qué talla necesitas? También puedo ayudarte a encontrar el modelo perfecto según tu preferencia de marca y estilo."
+            return "Tenemos desde la 36 hasta la 45. ¿Qué talla necesitás? También te puedo ayudar a encontrar el modelo perfecto."
         
         elif any(word in user_message_lower for word in ["envío", "envios", "delivery", "entrega"]):
-            return "Realizamos envíos:\n• Local (Dolores): Gratis\n• Provincia: Desde $500\n• Nacional: Desde $800\n\n¿Te interesa algún producto en particular?"
+            return "Hacemos envíos:\n• Local (Dolores): Gratis\n• Provincia: Desde $500\n• Nacional: Desde $800\n\n¿Te interesa algún producto?"
         
         elif any(word in user_message_lower for word in ["pago", "pagar", "tarjeta", "efectivo"]):
-            return "Aceptamos:\n• Efectivo\n• Tarjeta de débito\n• Tarjeta de crédito\n• Transferencia bancaria\n• Mercado Pago\n\n¿En qué más puedo ayudarte?"
+            return "Aceptamos efectivo, tarjeta de débito, crédito, transferencia bancaria y Mercado Pago. ¿En qué más te puedo ayudar?"
         
         else:
-            return "¡Hola! Bienvenido a Zapatillas Dolores. Soy tu asistente virtual y estoy aquí para ayudarte con información sobre nuestros productos, precios, horarios y más. ¿En qué puedo asistirte hoy?"
+            return "¡Hola! ¿Cómo va? ¿Buscás algo en particular? Te puedo ayudar con información sobre productos, precios, horarios y más."
     
     def search_products(self, query: str) -> List[Dict[str, Any]]:
         """Busca productos basado en la consulta del usuario"""
