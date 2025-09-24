@@ -77,10 +77,13 @@ IMPORTANTE: Hablá como argentina, súper informal, natural. NO uses exclamacion
         if phone_number:
             history = self.db.get_conversation_history(phone_number, 3)
             if history:
-                contexto += "\n\nCONVERSACIÓN ANTERIOR:\n"
+                contexto += "\n\nCONTEXTO DE LA CONVERSACIÓN:\n"
+                contexto += "Recordá que ya hablaste con este cliente antes. No te presentes de nuevo.\n"
+                contexto += "Últimos intercambios:\n"
                 for msg in reversed(history):  # Orden cronológico
-                    contexto += f"Usuario: {msg['mensaje']}\n"
-                    contexto += f"María: {msg['respuesta']}\n"
+                    contexto += f"- Cliente: {msg['mensaje']}\n"
+                    contexto += f"- Vos: {msg['respuesta']}\n"
+                contexto += "\nIMPORTANTE: Continuá la conversación naturalmente, sin repetir lo que ya dijiste."
         
         return contexto
     
