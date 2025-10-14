@@ -3,6 +3,7 @@ import json
 import os
 from typing import Dict, Any, Optional
 from openrouter import OpenRouterAI
+import urllib.parse
 
 class WhatsAppAPI:
     def __init__(self):
@@ -85,6 +86,44 @@ class WhatsAppAPI:
                 
         except Exception as e:
             print(f"Error enviando plantilla: {str(e)}")
+            return False
+    
+    def send_document_message(self, to: str, document_url: str, filename: str = "lista_precios.pdf", caption: str = "") -> bool:
+        """Envía un documento PDF a WhatsApp"""
+        try:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "Content-Type": "application/json"
+            }
+            
+            payload = {
+                "messaging_product": "whatsapp",
+                "to": to,
+                "type": "document",
+                "document": {
+                    "link": document_url,
+                    "filename": filename,
+                    "caption": caption
+                }
+            }
+            
+            response = requests.post(
+                self.base_url,
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                print(f"Documento enviado exitosamente a {to}")
+                return True
+            else:
+                print(f"Error enviando documento: {response.status_code}")
+                print(f"Respuesta: {response.text}")
+                return False
+                
+        except Exception as e:
+            print(f"Error enviando documento: {str(e)}")
             return False
     
     def send_product_message(self, to: str, product: Dict[str, Any]) -> bool:
@@ -181,6 +220,24 @@ class WhatsAppAPI:
             print(f"Error enviando información de la tienda: {str(e)}")
             return False
     
+    def send_price_list_pdf(self, to: str) -> bool:
+        """Envía la lista de precios en PDF"""
+        try:
+            # URL del PDF proporcionada
+            pdf_url = "https://doc-0g-5c-apps-viewer.googleusercontent.com/viewer/secure/pdf/jq1q8fvv4aj7nkrdgvl63dj88876jnbk/65m3raapm4se7qlhg2193gs5ja0tiqqu/1760484750000/drive/00711664236692323085/ACFrOgDILoXafo33PBcGg4aFLa40OhoeY44iUscZR1wuToeGycwIHQ8pQW9A-brTgcJ_KJeLYjWh0QCz0T_eg-Hgqoh3IMlc8c-1ckh7U1lCA21kS7iH0SFm40QrsuJ7hM9FSgj2vbMlOtwRMgxnNla5YB25JpgCde9faWC2Ie91j7mzYr_s13D36zA__T7gLCtDuUjlzgPWCKelyQhACpDwO00ciBYhNifFV2-iANKOAdhr1VK9Lv6NKPglLZ2GpStzvXzMzeRokdn39BTK?print=true&nonce=dd5nm6p9npifa&user=00711664236692323085&hash=dt87jesvspr4r80forvrjm1kv8c91itn"
+            
+            # Primero enviar un mensaje explicativo
+            message = "📋 Te envío nuestra lista de precios actualizada. Ahí vas a encontrar todos los productos con sus precios y descuentos disponibles."
+            self.send_message(to, message)
+            
+            # Luego enviar el PDF
+            caption = "📋 Lista de Precios - Zapatillas Dolores\n\nAquí tenés todos nuestros productos con precios actualizados. ¡Cualquier consulta, avisame!"
+            return self.send_document_message(to, pdf_url, "lista_precios.pdf", caption)
+            
+        except Exception as e:
+            print(f"Error enviando lista de precios: {str(e)}")
+            return False
+    
     def process_message(self, message_data: Dict[str, Any]) -> bool:
         """Procesa un mensaje entrante y genera respuesta"""
         try:
@@ -194,6 +251,17 @@ class WhatsAppAPI:
                 return False
             
             print(f"Mensaje recibido de {phone_number}: {message_text}")
+            
+            # Verificar si pide lista de precios
+            message_lower = message_text.lower()
+            price_list_keywords = [
+                "lista de precios", "lista precios", "precios", "catálogo", "catalogo",
+                "precio lista", "lista", "pdf", "archivo", "documento"
+            ]
+            
+            if any(keyword in message_lower for keyword in price_list_keywords):
+                print("Usuario pidió lista de precios, enviando PDF...")
+                return self.send_price_list_pdf(phone_number)
             
             # Procesar mensaje con IA
             ai_response = self.ai.generate_response(message_text, phone_number)

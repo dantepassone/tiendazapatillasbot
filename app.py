@@ -313,6 +313,32 @@ def test_whatsapp():
             "error": str(e)
         }), 500
 
+@app.route("/test-pdf", methods=["GET"])
+def test_pdf():
+    """Endpoint para probar envío de PDF"""
+    try:
+        from whatsapp import WhatsAppAPI
+        whatsapp = WhatsAppAPI()
+        
+        # URL de prueba (puedes cambiar el número de teléfono)
+        test_phone = request.args.get("phone", "5492245400209")
+        
+        # Probar envío de PDF
+        success = whatsapp.send_price_list_pdf(test_phone)
+        
+        return jsonify({
+            "status": "success" if success else "error",
+            "message": "PDF enviado exitosamente" if success else "Error enviando PDF",
+            "test_phone": test_phone
+        })
+        
+    except Exception as e:
+        logger.error(f"PDF test failed: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
 @app.errorhandler(404)
 def not_found(error):
     """Manejo de errores 404"""
