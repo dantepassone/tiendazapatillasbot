@@ -339,6 +339,41 @@ def test_pdf():
             "error": str(e)
         }), 500
 
+@app.route("/test-keywords", methods=["GET"])
+def test_keywords():
+    """Endpoint para probar detección de palabras clave"""
+    try:
+        from whatsapp import WhatsAppAPI
+        whatsapp = WhatsAppAPI()
+        
+        # Mensaje de prueba
+        test_message = request.args.get("message", "lista de precios")
+        test_phone = request.args.get("phone", "5492245400209")
+        
+        # Simular mensaje de WhatsApp
+        message_data = {
+            "from": test_phone,
+            "text": {"body": test_message},
+            "id": "test_message_id"
+        }
+        
+        # Procesar mensaje
+        success = whatsapp.process_message(message_data)
+        
+        return jsonify({
+            "status": "success" if success else "error",
+            "message": f"Procesado mensaje: '{test_message}'",
+            "test_phone": test_phone,
+            "success": success
+        })
+        
+    except Exception as e:
+        logger.error(f"Keywords test failed: {str(e)}")
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
 @app.errorhandler(404)
 def not_found(error):
     """Manejo de errores 404"""

@@ -226,16 +226,23 @@ class WhatsAppAPI:
             # URL del PDF proporcionada
             pdf_url = "https://doc-0g-5c-apps-viewer.googleusercontent.com/viewer/secure/pdf/jq1q8fvv4aj7nkrdgvl63dj88876jnbk/65m3raapm4se7qlhg2193gs5ja0tiqqu/1760484750000/drive/00711664236692323085/ACFrOgDILoXafo33PBcGg4aFLa40OhoeY44iUscZR1wuToeGycwIHQ8pQW9A-brTgcJ_KJeLYjWh0QCz0T_eg-Hgqoh3IMlc8c-1ckh7U1lCA21kS7iH0SFm40QrsuJ7hM9FSgj2vbMlOtwRMgxnNla5YB25JpgCde9faWC2Ie91j7mzYr_s13D36zA__T7gLCtDuUjlzgPWCKelyQhACpDwO00ciBYhNifFV2-iANKOAdhr1VK9Lv6NKPglLZ2GpStzvXzMzeRokdn39BTK?print=true&nonce=dd5nm6p9npifa&user=00711664236692323085&hash=dt87jesvspr4r80forvrjm1kv8c91itn"
             
+            print(f"📋 Enviando lista de precios a {to}")
+            print(f"📋 URL del PDF: {pdf_url[:100]}...")
+            
             # Primero enviar un mensaje explicativo
             message = "📋 Te envío nuestra lista de precios actualizada. Ahí vas a encontrar todos los productos con sus precios y descuentos disponibles."
-            self.send_message(to, message)
+            message_success = self.send_message(to, message)
+            print(f"📋 Mensaje explicativo enviado: {message_success}")
             
             # Luego enviar el PDF
             caption = "📋 Lista de Precios - Zapatillas Dolores\n\nAquí tenés todos nuestros productos con precios actualizados. ¡Cualquier consulta, avisame!"
-            return self.send_document_message(to, pdf_url, "lista_precios.pdf", caption)
+            pdf_success = self.send_document_message(to, pdf_url, "lista_precios.pdf", caption)
+            print(f"📋 PDF enviado: {pdf_success}")
+            
+            return pdf_success
             
         except Exception as e:
-            print(f"Error enviando lista de precios: {str(e)}")
+            print(f"❌ Error enviando lista de precios: {str(e)}")
             return False
     
     def process_message(self, message_data: Dict[str, Any]) -> bool:
@@ -256,12 +263,18 @@ class WhatsAppAPI:
             message_lower = message_text.lower()
             price_list_keywords = [
                 "lista de precios", "lista precios", "precios", "catálogo", "catalogo",
-                "precio lista", "lista", "pdf", "archivo", "documento"
+                "precio lista", "lista", "pdf", "archivo", "documento", "precio",
+                "cuanto cuesta", "cuánto cuesta", "precio", "valores", "tarifa"
             ]
             
+            print(f"🔍 Verificando palabras clave en: '{message_lower}'")
+            print(f"🔍 Palabras clave: {price_list_keywords}")
+            
             if any(keyword in message_lower for keyword in price_list_keywords):
-                print("Usuario pidió lista de precios, enviando PDF...")
+                print("✅ Usuario pidió lista de precios, enviando PDF...")
                 return self.send_price_list_pdf(phone_number)
+            else:
+                print("❌ No se detectaron palabras clave para lista de precios")
             
             # Procesar mensaje con IA
             ai_response = self.ai.generate_response(message_text, phone_number)
